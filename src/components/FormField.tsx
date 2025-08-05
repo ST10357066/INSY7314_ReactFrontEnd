@@ -1,4 +1,4 @@
-import { ReactNode, InputHTMLAttributes, SelectHTMLAttributes } from "react";
+import { ReactNode, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { CheckCircle, AlertCircle } from "lucide-react";
 
 interface FormFieldProps {
@@ -67,6 +67,24 @@ export function Input({ error, className = "", ...props }: InputProps) {
   
   return (
     <input
+      className={`${baseClass} ${errorClass} ${className}`}
+      {...props}
+    />
+  );
+}
+
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: boolean;
+}
+
+export function Textarea({ error, className = "", ...props }: TextareaProps) {
+  const baseClass = "block w-full px-3 py-2 border rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors";
+  const errorClass = error 
+    ? "border-red-300 text-red-900 placeholder-red-300" 
+    : "border-slate-300 text-slate-900";
+  
+  return (
+    <textarea
       className={`${baseClass} ${errorClass} ${className}`}
       {...props}
     />

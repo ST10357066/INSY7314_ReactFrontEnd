@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "@/contexts/AuthContext";
-import { Shield, ArrowLeft, CheckCircle } from "lucide-react";
+import { Shield, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Dialog from "@/components/Dialog";
@@ -13,6 +13,7 @@ export default function Register() {
   const { user, redirectToLogin, isPending } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,17 +24,27 @@ export default function Register() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleGoogleSignUp = async () => {
+  // Handle profile form display logic properly
+  useEffect(() => {
+    if (user && !showSuccessDialog && !showProfileForm) {
+      setShowProfileForm(true);
+    }
+  }, [user, showSuccessDialog, showProfileForm]);
+
+  const handleGoogleSignUp = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
       await redirectToLogin();
     } catch (error) {
       console.error("Sign up failed:", error);
+      setError("Sign up failed. Please try again.");
+    } finally {
       setIsLoading(false);
     }
-  };
+  }, [redirectToLogin]);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     try {
       UserProfileSchema.parse(formData);
       setErrors({});
@@ -50,9 +61,9 @@ export default function Register() {
       }
       return false;
     }
-  };
+  }, [formData]);
 
-  const handleSubmitProfile = async (e: React.FormEvent) => {
+  const handleSubmitProfile = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -60,6 +71,7 @@ export default function Register() {
     }
 
     setIsLoading(true);
+    setError(null);
     try {
       const response = await fetch("/api/profile", {
         method: "POST",
@@ -73,31 +85,40 @@ export default function Register() {
         setShowSuccessDialog(true);
       } else {
         const errorData = await response.json();
-        console.error("Profile creation failed:", errorData);
+        throw new Error(errorData.message || "Profile creation failed");
       }
     } catch (error) {
       console.error("Profile creation failed:", error);
+      setError(error instanceof Error ? error.message : "Profile creation failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [formData, validateForm]);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = useCallback((field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
-  };
-
-  // Show profile form if user is logged in but hasn't completed profile
-  if (user && !showSuccessDialog && !showProfileForm) {
-    setShowProfileForm(true);
-  }
+    // Clear general error when user makes changes
+    if (error) {
+      setError(null);
+    }
+  }, [errors, error]);
 
   return (
     <Layout>
       <div className="min-h-[80vh] flex items-center justify-center py-12">
+        {/* Error Display */}
+        {error && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 p-4 bg-red-50 border border-red-200 rounded-lg max-w-md">
+            <div className="flex items-center">
+              <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
+              <span className="text-red-800">{error}</span>
+            </div>
+          </div>
+        )}
         <div className="max-w-md w-full">
           {/* Back Link */}
           <Link

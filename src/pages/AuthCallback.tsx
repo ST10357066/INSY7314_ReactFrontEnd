@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/contexts/AuthContext";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -9,7 +9,7 @@ export default function AuthCallback() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const handleNavigation = useCallback(() => {
     if (!isPending) {
       if (user) {
         // User is authenticated, redirect to dashboard
@@ -21,6 +21,10 @@ export default function AuthCallback() {
       }
     }
   }, [user, isPending, navigate]);
+
+  useEffect(() => {
+    handleNavigation();
+  }, [handleNavigation]);
 
   return (
     <Layout>
