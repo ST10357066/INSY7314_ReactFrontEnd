@@ -22,6 +22,7 @@
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.4.1",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.0.0",
     "eslint": "9.25.1",
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-react-refresh": "0.4.19",
@@ -35,6 +36,7 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
+    "build:gh-pages": "cross-env NODE_ENV=production tsc -b && vite build",
     "cf-typegen": "wrangler types",
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "dev": "vite",
@@ -48,6 +50,8 @@
     "test:e2e": "playwright test",
     "deploy:dev": "wrangler deploy --env development",
     "deploy:staging": "wrangler deploy --env staging",
-    "deploy:prod": "wrangler deploy --env production"
+    "deploy:prod": "wrangler deploy --env production",
+    "preview": "vite preview",
+    "deploy:gh-pages": "node scripts/deploy-gh-pages.js"
   }
 }

@@ -101,6 +101,42 @@ npm run lint
 
 # Deploy to Cloudflare Workers
 npm run deploy
+
+# Build for GitHub Pages
+npm run build:gh-pages
+
+# Preview production build
+npm run preview
+```
+
+## 🌐 GitHub Pages Deployment
+
+This project is configured for automatic deployment to GitHub Pages. The site will be available at:
+`https://your-username.github.io/INSY7314_ReactFrontEnd/`
+
+### Setup Instructions
+
+1. **Enable GitHub Pages** in your repository settings:
+   - Go to Settings → Pages
+   - Source: "GitHub Actions"
+   - This will automatically use the workflow in `.github/workflows/deploy.yml`
+
+2. **Push to main branch** - The site will automatically deploy when you push to the main or master branch
+
+3. **Custom Domain** (optional):
+   - Add your custom domain in Settings → Pages
+   - Update the `base` URL in `vite.config.ts` if needed
+
+### Manual Deployment
+
+If you need to deploy manually:
+
+```bash
+# Build for GitHub Pages
+npm run build:gh-pages
+
+# The built files will be in the `dist/` directory
+# You can then upload these to GitHub Pages manually
 ```
 
 ## 🏗️ Architecture
