@@ -33,6 +33,8 @@
 - Go to your repository on GitHub
 - Settings → Pages
 - Source: "GitHub Actions"
+- **Important**: You must enable this manually in repository settings first
+- The workflow will now automatically configure Pages if it's not already enabled
 
 ### 2. Push Your Changes
 ```bash
