@@ -23,7 +23,7 @@ try {
 
   console.log('📦 Building project for GitHub Pages...');
   
-  // Build the project
+  // Build the project using the GitHub Pages specific config
   execSync('npm run build:gh-pages', { stdio: 'inherit' });
   
   console.log('\n✅ Build completed successfully!');

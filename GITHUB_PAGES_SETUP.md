@@ -6,7 +6,9 @@
    - Automatically builds and deploys on push to main/master
    - Uses Node.js 18 and npm ci for reliable builds
 
-2. **Vite Configuration Updates** (`vite.config.ts`)
+2. **Vite Configuration Updates** 
+   - `vite.config.ts` - Main config with Cloudflare plugin
+   - `vite.config.gh-pages.ts` - GitHub Pages specific config (no Cloudflare plugin)
    - Added base URL for GitHub Pages: `/INSY7314_ReactFrontEnd/`
    - Configured for production builds
 

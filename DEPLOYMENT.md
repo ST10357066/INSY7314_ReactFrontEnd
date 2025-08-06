@@ -57,8 +57,8 @@ To use a custom domain:
 
 2. **Update Vite config** (if needed):
    ```typescript
-   // vite.config.ts
-   base: process.env.NODE_ENV === 'production' ? '/' : '/',
+   // vite.config.gh-pages.ts
+   base: '/',
    ```
 
 3. **DNS Configuration**:
